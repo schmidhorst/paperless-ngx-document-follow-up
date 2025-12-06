@@ -18,13 +18,19 @@ class FlushStreamHandler(logging.StreamHandler):
     super().emit(record)
     self.flush()  # erzwingt sofortigen Flush
 
+scriptName = os.path.basename(__file__)
+
 logging.basicConfig(
   level=logging.INFO
-  , format="%(asctime)s - %{script}s [%(levelname)s] %(message)s"
+  , format="%(asctime)s - %(script)s [%(levelname)s] %(message)s"
   , datefmt="%Y-%m-%d %H:%M:%S"
   , handlers=[FlushStreamHandler(sys.stdout)]
   )
 
+logger = logging.LoggerAdapter(
+  logging.getLogger(),
+  {"script": scriptName}
+  )
 
 # ----------------------
 # Konfiguration aus Env
@@ -46,7 +52,7 @@ if os.path.exists(env_path):
       key, value = line.split("=", 1)
       os.environ[key] = value
 else :
-  logging.error(f"File {env_path} not found")
+  logger.error(f"File {env_path} not found")
   exit()   
 
 PAPERLESS_URL = os.environ.get("PAPERLESS_URL")
@@ -83,10 +89,10 @@ def send_email(message, subject="Paperless ToDo Update"):
       server.login(user, password)
       server.send_message(msg)
   except Exception as e:
-    logging.error(f"E-Mail-Fehler: {e}")
+    logger.error(f"E-Mail-Fehler: {e}")
 
 
-logging.info(f"Starting {__file__} ...")
+logger.info(f"Starting {__file__} ...")
 messagesSet = []
 messagesUnset = []
 
@@ -95,8 +101,8 @@ start = time.time()
 limit_set_date = today + timedelta(days=DAYS_AHEAD) # z.B. heute in 3 Tagen
 limit_unset_date = today - timedelta(days=OVERDUE_UNSET_DAYS) # z.B. heute vor 3 Tagen
 
-logging.info(f"Starting {__file__}, DUE_FIELD_NAME:  {DUE_FIELD_NAME} ")
-logging.debug(f"PAPERLESS_URL: {PAPERLESS_URL}")
+logger.info(f"Starting {__file__}, DUE_FIELD_NAME:  {DUE_FIELD_NAME} ")
+logger.debug(f"PAPERLESS_URL: {PAPERLESS_URL}")
 # ----------------------
 # 1. Custom Field ID von CUSTOM_FIELD_NAME finden:
 # ----------------------
@@ -149,7 +155,7 @@ for doc in docs: # Enum für alle docs
     continue
   docWithTagCount += 1
   due_date = datetime.strptime(value, "%Y-%m-%d").date()
-  logging.info(f"Doc mit Fälligkeit: {doc['title']} am {value}")
+  logger.info(f"Doc mit Fälligkeit: {doc['title']} am {value}")
   tags_set = set(doc["tags"])
 
   # log_entries = []
@@ -159,7 +165,7 @@ for doc in docs: # Enum für alle docs
     if tag_id not in tags_set:
       tags_set.add(tag_id)
       requests.patch( f"{PAPERLESS_URL}/api/documents/{doc['id']}/", headers=HEADERS, json={"tags": list(tags_set)} )
-      logging.info(f"✅ Tag {TODO_TAG_NAME} set: {doc['title']}")
+      logger.info(f"✅ Tag {TODO_TAG_NAME} set: {doc['title']}")
       # messages.append(f"✅ Tag {TODO_TAG_NAME} set: {doc['title']} (due date {due_date})")
       messagesSet.append(f"{due_date} doc['title']")
       chgCount += 1
@@ -169,7 +175,7 @@ for doc in docs: # Enum für alle docs
     if tag_id in tags_set:
       tags_set.remove(tag_id)
       requests.patch( f"{PAPERLESS_URL}/api/documents/{doc['id']}/", headers=HEADERS, json={"tags": list(tags_set)} )
-      logging.info(f"❌ Tag {TODO_TAG_NAME} unset: {doc['title']}")
+      logger.info(f"❌ Tag {TODO_TAG_NAME} unset: {doc['title']}")
       messagesUnset.append(f"{due_date} {doc['title']}")
 
 runtime = time.time() - start
@@ -177,7 +183,7 @@ runtime_Unit="s"
 if (runtime > 180) :
   runtime = int(runtime // 60) 
   runtime_Unit="min"
-logging.info(f"{docCount} docs scanned in {runtime:.1f}{runtime_Unit}, {docWithTagCount} with Tag {DUE_FIELD_NAME} found, Tag {TODO_TAG_NAME} set for {chgCount} files")
+logger.info(f"{docCount} docs scanned in {runtime:.1f}{runtime_Unit}, {docWithTagCount} with Tag {DUE_FIELD_NAME} found, Tag {TODO_TAG_NAME} set for {chgCount} files")
     # Log schreiben
 message=""
 if messagesSet:
