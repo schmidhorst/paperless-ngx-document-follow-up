@@ -4,9 +4,9 @@ If your paperless-ngx installation is running as a docker pprojecct in some cont
 This files are allowing to create an additional container, which uses the paperless-ngx-API to set an document tag if the actual date is near the custom field date of your document.
 
 ## Usage:
-- Create an custom field with data type "Date", e.g. with the name 'DueDate' or 'Deadline'.
+- Create an custom field with data type "Date", e.g. with the name 'DueDate' or 'Deadline' (DUE_FIELD).
 - Assign it to some of your documents.
-- Create or select a tag, e.g. with the name 'ToDo' or 'open'
+- Create or select a tag, e.g. with the name 'ToDo' or 'open' (TODO_TAG).
 
 Optional:
   - Filter your documents by that tag and save it as a view.
@@ -25,5 +25,10 @@ Optional:
 - Copy the files from this repository to that folder
 - Edit the .env file. Put in your values
 - In the shell go to that folder and run
+```shell  
   docker compose build
   docker compose up
+```
+  At start of the container, the document scan is done immediately. And then again at the configured hour. 
+  If you stop and start the container, then the tag will be assigned or removed again if it was in between manually changed.
+  If the container was stopped before the TARGET_HOUR and not started till end of the day, the tags of the documents, which should have been altered that day, will remain unchanged.
