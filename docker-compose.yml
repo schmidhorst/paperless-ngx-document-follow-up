@@ -1,0 +1,34 @@
+services:
+  todo:
+    build: .
+    container_name: paperless-overdue
+    volumes:
+      - ./todo.py:/app/todo.py:ro    # optional, nur wenn du live edit brauchst
+      - ./dailyRunner.sh:/app/dailyRunner.sh:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - ./.env
+    environment:
+      - TZ=${TZ}
+      - PAPERLESS_URL=${PAPERLESS_URL}
+      - PAPERLESS_NETWORK=${PAPERLESS_NETWORK}
+      - API_TOKEN=${API_TOKEN}
+      - DAYS_AHEAD=${DAYS_AHEAD}
+      - TODO_TAG=${TODO_TAG}
+      - DUE_FIELD=${DUE_FIELD}
+      - OVERDUE_UNSET_DAYS=${OVERDUE_UNSET_DAYS}
+      - TARGET_HOUR=${TARGET_HOUR}
+      - EMAIL_SMTP_SERVER=${EMAIL_SMTP_SERVER}
+      - EMAIL_SMTP_PORT=${EMAIL_SMTP_PORT}
+      - EMAIL_USE_TLS=${EMAIL_USE_TLS}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_TO=${EMAIL_TO}
+      - CHECK_INTERVAL_S=${CHECK_INTERVAL_S}
+    working_dir: /app
+    networks:
+      - paperless
+networks:
+  paperless:
+    external: true
+    name: ${PAPERLESS_NETWORK}
