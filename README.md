@@ -36,3 +36,9 @@ And if all is ok:
   At start of the container, the document scan is done immediately. And then again at the configured hour. 
   If you stop and start the container, then the tag will be assigned or removed again if it was in between manually changed.
   If the container was stopped before the TARGET_HOUR and not started till end of the day, the tags of the documents, which should have been altered that day, will remain unchanged.
+
+## Hint
+This may be a workaround for the feature request https://github.com/paperless-ngx/paperless-ngx/discussions/11295 (Support relative date fields for workflow automation and conditional views)
+
+## Credits
+- Thanks to ChatGPT. Without ChatGPT I would definitly not be able to setuo that.
