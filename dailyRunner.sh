@@ -1,7 +1,9 @@
 #!/bin/bash
+# Horst Schmid
+# do a first run immediately at start and then run daily once at given TARGET_HOUR 
 
 # shellcheck disable=SC2269
-TARGET_HOUR="${TARGET_HOUR}"
+TARGET_HOUR="${TARGET_HOUR%%:*}" # 4, 4:00 is converted to 4
 CHECK_INTERVAL_S="${CHECK_INTERVAL_S}"
   # gut 1 Stunde Verzögerung nach dem Lauf damit sich TARGET_HOUR erst wieder einen Tag später zutrifft
 if [ -z "$TARGET_HOUR" ]; then
@@ -10,7 +12,7 @@ fi
 : "${CHECK_INTERVAL_S:=300}" # short form: Parameter-Expansion with assignment
 
 # shellcheck disable=SC2164
-echo "$(date '+%Y-%m-%d %H:%M:%S') - dailyRunner.sh started, daily hour is ${TARGET_HOUR}:xx o'clock"
+echo "$(date '+%Y-%m-%d %H:%M:%S') - dailyRunner.sh started, daily scan hour is ${TARGET_HOUR}:xx o'clock"
 while true; do
   run_hour=$(date +%H)
   python3 -u todo.py

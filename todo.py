@@ -155,7 +155,7 @@ for doc in docs: # Enum für alle docs
   # log_entries = []
 
   # ✅ Document hat Fälligkeitsdatum und ist (demnächst) fällig (oder überfällig)
-  if due_date <= limit_set_date: # ohne überfällig: today <= due_date <= limit_set_date:
+  if due_date == limit_set_date: # ohne überfällig: today <= due_date <= limit_set_date:
     if tag_id not in tags_set:
       tags_set.add(tag_id)
       requests.patch( f"{PAPERLESS_URL}/api/documents/{doc['id']}/", headers=HEADERS, json={"tags": list(tags_set)} )
