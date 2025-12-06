@@ -24,10 +24,14 @@ Optional:
 - Create in your docker folder a new folder, e.g. paperless_overdue
 - Copy the files from this repository to that folder
 - Edit the .env file. Put in your values
-- In the shell go to that folder and run
+- In the shell go to that folder and run (for testing)
 ```shell  
   docker compose build
   docker compose up
+```
+And if all is ok:
+```shell  
+  docker compose up -d
 ```
   At start of the container, the document scan is done immediately. And then again at the configured hour. 
   If you stop and start the container, then the tag will be assigned or removed again if it was in between manually changed.
