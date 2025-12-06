@@ -1,7 +1,7 @@
 # paperless-ngx-document-follow-up
 In paperless-ngx you can create a custom field with the type 'date'. But is does not yet allow to use a date value relative to the actual date for an Document filter or an view.
-If your paperless-ngx installation is running as a docker pprojecct in some containers, this tool may help.
-This files are allowing to create an additional container, which uses the paperless-ngx-API to set an document tag if the actual date is near the custom field date of your document.
+If your paperless-ngx installation is running as a docker projecct in some containers, this tool may help.
+This files are allowing you to create an additional container, which uses the paperless-ngx-API to set an document tag if the actual date is near the custom field date of your document.
 
 ## Usage:
 - Create an custom field with data type "Date", e.g. with the name 'DueDate' or 'Deadline' (DUE_FIELD).
@@ -23,7 +23,7 @@ Optional:
 - Use 'Regenerate' to create an 'API Auth Token' (if you don't have one yet) and save it somewhere.
 - Create in your docker folder a new folder, e.g. paperless_overdue
 - Copy the files from this repository to that folder
-- Edit the .env file. Put in your values
+- Edit the .env file. Put in your values. The comments in that file will help you to set the proper values.
 - In the shell go to that folder and run (for testing)
 ```shell  
   docker compose build
@@ -35,7 +35,7 @@ And if all is ok:
 ```
   At start of the container, the document scan is done immediately. And then again at the configured hour. 
   If you stop and start the container, then the tag will be assigned or removed again if it was in between manually changed.
-  If the container was stopped before the TARGET_HOUR and not started till end of the day, the tags of the documents, which should have been altered that day, will remain unchanged.
+  If the container was stopped before the TARGET_HOUR and not started till end of the day, the tags of the documents, which should have been altered that day(s), will remain unchanged.
 
 ## Hint
 This may be a workaround for the feature request https://github.com/paperless-ngx/paperless-ngx/discussions/11295 (Support relative date fields for workflow automation and conditional views)
