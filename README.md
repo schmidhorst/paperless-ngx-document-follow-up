@@ -6,7 +6,7 @@ This files are allowing you to create an additional container, which uses the pa
 ## Usage:
 - Create an custom field with data type "Date", e.g. with the name 'DueDate' or 'Deadline' (DUE_FIELD).
 - Assign it to some of your documents.
-- Create or select a tag, e.g. with the name 'ToDo' or 'open' (TODO_TAG).
+- Create or select a tag, e.g. with e.g. the name 'ToDo' or 'open' (TODO_TAG).
 
 Optional:
   - Filter your documents by that tag and save it as a view.
