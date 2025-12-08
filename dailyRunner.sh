@@ -11,6 +11,8 @@ if [ -z "$TARGET_HOUR" ]; then
 fi
 : "${CHECK_INTERVAL_S:=300}" # short form: Parameter-Expansion with assignment
 
+#  export LOGLEVEL=DEBUG # optional for todo.py, overwrite value from .env
+
 # shellcheck disable=SC2164
 echo "$(date '+%Y-%m-%d %H:%M:%S') - dailyRunner.sh started, daily scan hour is ${TARGET_HOUR}:xx o'clock"
 while true; do
