@@ -30,6 +30,7 @@ services:
       - CHECK_INTERVAL_S=${CHECK_INTERVAL_S}
       - LOGLEVEL=${LOGLEVEL}
     working_dir: /app
+    restart: unless-stopped
     networks:
       - paperless
 networks:
