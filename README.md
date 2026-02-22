@@ -24,12 +24,12 @@ Optional:
 - Create in your docker folder a new folder, e.g. paperless_overdue
 - Copy the files from this repository to that folder
 - Edit the .env file. Put in your values. The comments in that file will help you to set the proper values.
-- In the shell go to that folder and run (for testing)
+- In the shell go to that folder and run
 ```shell  
-  docker compose build
-  docker compose up
+  ./compose_build.sh
 ```
-And if all is ok:
+That creates the image, creates the container and start it for test purpose.
+And if all is ok, stop it with CTRL + c and start it in the background as daemon:
 ```shell  
   docker compose up -d
 ```
