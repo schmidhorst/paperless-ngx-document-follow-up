@@ -143,11 +143,15 @@ logger.debug(f"PAPERLESS_URL: {PAPERLESS_URL}")
 # ----------------------
 # 1. Get the ID of the custom field CUSTOM_FIELD_NAME:
 # ----------------------
-cf_list = requests.get(f"{PAPERLESS_URL}/api/custom_fields/", headers=HEADERS).json()["results"]
-field = next(f for f in cf_list if f["name"] == DUE_FIELD_NAME)
-if not field:
-  logger.error(f"DUE_FIELD '{DUE_FIELD_NAME}' is not configured in your paperless instance!")
-  exit(1)
+try:
+  cf_list = requests.get(f"{PAPERLESS_URL}/api/custom_fields/", headers=HEADERS).json()["results"]
+  field = next(f for f in cf_list if f["name"] == DUE_FIELD_NAME)
+  if not field:
+    logger.error(f"DUE_FIELD '{DUE_FIELD_NAME}' is not configured in your paperless instance!")
+    exit(1)
+except Exception as e:
+  logger.error(f"{repr(e)}")
+  exit(2)
 field_id = field["id"]
 
 # ----------------------
@@ -252,3 +256,4 @@ if messagesUnset:
   message += "\r\n".join(messagesUnset)
 if message != "":
   send_email(message)    # send eMail
+exit (0)
