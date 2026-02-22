@@ -9,7 +9,7 @@ CHECK_INTERVAL_S="${CHECK_INTERVAL_S}"
 if [ -z "$TARGET_HOUR" ]; then
   TARGET_HOUR=4 # set defaults, if not in environment
 fi
-: "${CHECK_INTERVAL_S:=300}" # short form: Parameter-Expansion with assignment
+: "${CHECK_INTERVAL_S:=300}" # short form: Parameter-Expansion with default assignment
 
 #  export LOGLEVEL=DEBUG # optional for todo.py, overwrite value from .env
 
